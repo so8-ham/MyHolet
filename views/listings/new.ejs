@@ -1,0 +1,53 @@
+<% layout("/layouts/boilerPlate") %>
+
+<% const prev = typeof listing !== 'undefined' ? listing : {} %>
+<% const imageValue = prev && prev.image ? (typeof prev.image === 'string' ? prev.image : (prev.image.url || '')) : '' %>
+    <div class="row">
+        <div class="col-8 offset-2">
+    <h3>Create a new Listing</h3>
+    <% if (typeof error !== 'undefined'&& error.length) { %>
+        <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+   <form method="post" class="needs-validation" action="/listings" enctype="multipart/form-data" novalidate>
+    <div class="mb-2">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" name="listing[title]" placeholder="Enter name" class="form-control" value="<%= prev.title || '' %>" required>
+    <div class="valid-feedback">Title Looks good!</div>
+    </div>
+
+         <div class="mb-2">
+             <label for="description" class="form-label">Description</label>
+                    <textarea name="listing[description]"  class="form-control" required><%= prev.description || '' %></textarea>
+                    <div class="invalid-feedback">Please enter a valid Description</div>
+         </div>
+     <div class="row">
+          <div class="mb-2 col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input type="text" name="listing[price]" placeholder="Enter price" class="form-control" value="<%= prev.price || '' %>" required>
+            <div class="invalid-feedback">Please enter a valied Price</div>
+      </div>
+ <div class="mb-2 col-md-8">
+          <label for="country" class="form-label">Country</label>
+            <input type="text" name="listing[country]" placeholder="Enter country" class="form-control" value="<%= prev.country || '' %>" required>
+            <div class="invalid-feedback">Please enter a valid Country</div>
+      </div>
+     </div>
+
+
+      <div class="mb-2">
+           <label for="image" class="form-label">Upload Image</label>
+<input type="file" name="listing[image]" class="form-control" value="<%= imageValue %>">
+<div class="invalid-feedback">Please upload a image</div>
+required
+      </div>
+        <div class="mb-4">
+                   <label for="location" class="form-label">Location</label>
+             <input type="text" name="listing[location]" placeholder="Enter location" class="form-control" value="<%= prev.location || '' %>" required>
+             <div class="invalid-feedback">Location Should be valid</div>
+        </div>
+         <button class="btn btn-dark add-btn">Add</button>
+         <br> <br>
+   </form>
+   </div>
+   </div>
+

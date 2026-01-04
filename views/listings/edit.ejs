@@ -1,0 +1,94 @@
+<% layout("/layouts/boilerPlate") %>
+
+<% const prev = typeof listing !== 'undefined' ? listing : {} %>
+<% const imageValue = prev && prev.image ? (typeof prev.image === 'string' ? prev.image : (prev.image.url || '')) : '' %>
+
+    <div class="row">
+           <div class="col-8 offset-2">
+    <h3>Edit your Listing</h3>
+   <form method="post" action="/listings/<%= listing._id %>?_method=PUT" class="needs-validation" novalidate enctype="multipart/form-data">
+    <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+         <input type="text" name="listing[title]" value="<%= listing.title %>" class="form-control"required>
+          <div class="valid-feedback">Title Looks good!</div>
+    </div>
+       
+     <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+        <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
+          <div class="invalid-feedback">Please enter a valid Description</div>
+     </div>
+      <div class="row">
+          <div class="mb-3 col-md-4">
+            <label for="price" class="form-label">Price</label>
+        <input type="text" name="listing[price]" value="<%= listing.price %>" class="form-control" required>
+         <div class="invalid-feedback">Please enter a valied Price</div>
+     </div>
+      <div class="mb-3 col-md-8">
+         <label for="country" class="form-label">Country</label>
+              <input type="text" name="listing[country]" value="<%= listing.country %>" class="form-control" required>
+              <div class="invalid-feedback">Please enter a valid Country</div>
+       </div>
+      </div>
+     
+      <div class="mb-3">
+        original Listing image
+        <br>
+        <img src="<%=originalImg %>">
+      </div>
+
+
+
+     <div class="mb-3">
+            <label for="image" class="form-label">Upload New Image!</label>
+        <input type="file"
+         name="listing[image]"
+           class="form-control" >
+        <!-- <div class="mt-2" id="image-preview">
+          <% if (imageValue) { %>
+            <img id="image-preview-img" src="<%= imageValue %>" alt="current image" style="max-width:200px; max-height:150px; object-fit:cover;">
+          <% } %>
+        </div> -->
+        </div>
+    
+ <div class="mb-3">
+         <label for="location" class="form-label">Location</label>
+         <input type="text" name="listing[location]" value="<%= listing.location %>" class="form-control" required>
+ </div>
+         <button class="btn btn-dark add-btn">Edit</button>
+   </form>
+   </div>
+</div>
+<script>
+  (function(){
+    const input = document.getElementById('image-url-input');
+    const preview = document.getElementById('image-preview');
+    if (!input || !preview) return;
+
+    let timeout;
+    input.addEventListener('input', () => {
+      clearTimeout(timeout);
+      const url = input.value.trim();
+      // Debounce to avoid too many reloads on fast typing
+      timeout = setTimeout(() => {
+        if (!url) {
+          preview.innerHTML = '';
+          return;
+        }
+        // Use an Image to detect loading success/failure
+        const img = new Image();
+        img.onload = () => {
+          preview.innerHTML = '';
+          img.style.maxWidth = '200px';
+          img.style.maxHeight = '150px';
+          img.style.objectFit = 'cover';
+          preview.appendChild(img);
+        };
+        img.onerror = () => {
+          preview.innerHTML = '<div class="text-danger">Image failed to load. Check the URL.</div>';
+        };
+        img.src = url;
+      }, 250);
+    });
+  })();
+</script>
